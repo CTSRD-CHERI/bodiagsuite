@@ -1,0 +1,77 @@
+#
+# Makefile for running Buffer Overflow test suite programs (on CHERI, e.g.)
+#
+# 1. Use cheribuild to build bodiagsuite executables.
+#
+# 2. Copy the directory of generated executables
+#    (e.g., ~/cheri/build/bodiagsuite-128-build/bin/) to your CheriBSD host,
+#    being sure that the result is a directory named "bin".
+#
+# 3. Next to "bin" on your CheriBSD host, make a directory "run".
+#
+# 4. Invoke this make file, e.g.:
+#
+#      make -r -f /mnt/bodiagsuite/Makefile.bsd-run all
+#
+#    It is also possible to specify a single test instead:
+#
+#      make -r -f /mnt/bodiagsuite/Makefile.bsd-run basic-00001-large.out
+#
+# 5. In the run directory, there will be a large number of .out files, which
+#    record the exit status of the test.  Pass "DO_CORES=1 " to make if
+#    you want to keep core files from the tests, too.
+#
+# Because these programs were designed to stress static analysers, not
+# dynamic ones, none of them produce output beyond their exit status.  The
+# build system goes to some lengths (in cheribuild and the CMakeLists.txt
+# next to this file) to ensure that optimizations are turned off (i.e. -O0)
+# so that there is maximum opportunity for the undefined behavior to persist
+# to runtime.
+
+# Oh, what wouldn't I give for proper types in a scripting language. :'(
+#
+# The cd at the top "undoes" the outer make's "helpful" chdir() into the
+# specified .CURDIR below, since *this* expasion takes place before the
+# chdir(), but execution takes place afterwards.
+all:
+	cd ${.CURDIR}; \
+	ls ./bin | sed -e 's:^\([^.]*\).exe$$:\1.out:' | \
+    xargs ${MAKE} -r -f ${.MAKE.MAKEFILES:[1]} ;
+
+.PATH: ${.CURDIR}/bin
+.OBJDIR: ${.CURDIR}/run
+
+DO_CORES ?= 0
+.if ${DO_CORES} != 0
+LIMCMD=
+.else
+LIMCMD=limits -c 0
+.endif
+
+# These are designed to test the upper edge of the checked bounds for this
+# particular test case.
+ARGS_basic-00180-ok := 9 b c d
+ARGS_basic-00180-min := a 10 c d
+ARGS_basic-00180-med := a b 17 d
+ARGS_basic-00180-large := a b c 4105
+
+ENV_basic-00181-ok := STRINGLEN_OK=${:!awk 'BEGIN{ for(i = 0; i < 9; i++) { printf "a" ; } ; print }'!}
+ENV_basic-00181-min := STRINGLEN_MIN=${:!awk 'BEGIN{ for(i = 0; i < 10; i++) { printf "a" ; } ; print }'!}
+ENV_basic-00181-med := STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 17; i++) { printf "a" ; } ; print }'!}
+ENV_basic-00181-large := STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!}
+
+.SUFFIXES: .exe .out
+.exe.out:
+	(${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} ; echo $$? > ${.TARGET}) || true
+
+TestInputFile1:
+	awk 'BEGIN{ for(i = 0; i < 5000; i++) { printf "A" ; } }' > $@
+
+basic-00182-ok.out: TestInputFile1
+basic-00182-min.out: TestInputFile1
+basic-00182-med.out: TestInputFile1
+basic-00182-large.out: TestInputFile1
+
+# This one expects to run with a very very long cwd; just skip it.
+basic-00183-large.out:
+	echo skip > $@
