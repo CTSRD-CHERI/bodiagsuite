@@ -56,15 +56,19 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
 
+#include <assert.h>
+#include <errno.h>
 #include <unistd.h>
 
 int main(int argc, char *argv[])
 {
   char buf[10];
+  char * x;
 
 
   /*  BAD  */
-  getcwd(buf, 18);
+  x = getcwd(buf, 18);
+  assert((x != NULL) || (errno == ERANGE));
 
 
 

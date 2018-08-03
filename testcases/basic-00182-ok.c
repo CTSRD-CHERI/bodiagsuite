@@ -63,12 +63,14 @@ int main(int argc, char *argv[])
 {
   FILE * f;
   char buf[10];
+  char * x;
 
   f = fopen("TestInputFile1", "r");
   assert(f != NULL);
 
   /*  OK  */
-  fgets(buf, 10, f);
+  x = fgets(buf, 10, f);
+  assert(x != NULL);
 
   fclose(f);
 
