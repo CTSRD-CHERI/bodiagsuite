@@ -55,12 +55,30 @@ all: ${ALL_TARGETS}
 all:
 	echo "Done."
 
+
+_limits_path!=command -v limits || true
+.if !empty(_limits_path)
+HAVE_LIMITS_CMD=1
+.else
+HAVE_LIMITS_CMD=0
+.endif
+
 DO_CORES ?= 0
+
 .if ${DO_CORES} != 0
 LIMCMD=
 .else
+.if ${HAVE_LIMITS_CMD} != 0
 LIMCMD=limits -c 0
+.else
+LIMCMD=ulimit -c 0 &&
 .endif
+.endif
+.info HAVE_LIMITS_CMD=${HAVE_LIMITS_CMD} LIMCMD=${LIMCMD}
+
+info:
+	echo "HAVE_LIMITS_CMD=${HAVE_LIMITS_CMD}"
+	echo ".MAKE.OS=${.MAKE.OS}"
 
 # These are designed to test the upper edge of the checked bounds for this
 # particular test case.
