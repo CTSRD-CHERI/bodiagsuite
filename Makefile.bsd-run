@@ -33,13 +33,27 @@
 # The cd at the top "undoes" the outer make's "helpful" chdir() into the
 # specified .CURDIR below, since *this* expasion takes place before the
 # chdir(), but execution takes place afterwards.
+.if 0
 all:
 	cd ${.CURDIR}; \
 	ls ./bin | sed -e 's:^\([^.]*\).exe$$:\1.out:' | \
     xargs ${MAKE} -r -f ${.MAKE.MAKEFILES:[1]} ;
+.endif
 
 .PATH: ${.CURDIR}/bin
 .OBJDIR: ${.CURDIR}/run
+
+.if !exists(${.CURDIR}/run)
+.error "${.CURDIR}/run does not exists, run mkdir first!"
+.endif
+
+.if make(all)
+ALL_TARGETS!=cd ${.OBJDIR}/..; ls ./bin | sed -e 's:^\([^.]*\).exe$$:\1.out:'
+all: ${ALL_TARGETS}
+.endif  #target(all)
+
+all:
+	echo "Done."
 
 DO_CORES ?= 0
 .if ${DO_CORES} != 0
