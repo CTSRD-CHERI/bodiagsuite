@@ -59,7 +59,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int main(int argc, char *argv[])
 {
-  unsigned char* buf = (char*)malloc(10);
+  unsigned char* buf = (unsigned char*)malloc(10);
 
 
   /*  BAD  */
