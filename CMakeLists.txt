@@ -41,6 +41,7 @@ else()
 endif()
 
 file( GLOB test_cs RELATIVE ${CMAKE_SOURCE_DIR} testcases/*.c )
+file( GLOB test_cs_heap RELATIVE ${CMAKE_SOURCE_DIR} testcases-heap/*.c )
 # Or test with just a subset:
 # file ( GLOB test_cs RELATIVE ${CMAKE_SOURCE_DIR} testcases/basic-00001-*.c  testcases/basic-00232-*.c )
 
@@ -48,9 +49,9 @@ if (NOT CMAKE_CROSSCOMPILING)
 	enable_testing()
 endif()
 
-foreach ( tcf ${test_cs} )
+foreach ( tcf ${test_cs} ${test_cs_heap})
 	string ( REGEX REPLACE ".c$" "" tf ${tcf} )
-	string ( REGEX REPLACE "^testcases/" "" to ${tf} )
+	string ( REGEX REPLACE "^testcases(-heap)?/" "" to ${tf} )
 	unset ( tf )
 	add_executable ( ${to} ${tcf} )
 	target_compile_options( ${to} PUBLIC "-pthread")

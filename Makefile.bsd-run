@@ -92,6 +92,16 @@ ENV_basic-00181-min := STRINGLEN_MIN=${:!awk 'BEGIN{ for(i = 0; i < 10; i++) { p
 ENV_basic-00181-med := STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 17; i++) { printf "a" ; } ; print }'!}
 ENV_basic-00181-large := STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!}
 
+ARGS_basic-heap-00180-ok := 9 b c d
+ARGS_basic-heap-00180-min := a 10 c d
+ARGS_basic-heap-00180-med := a b 17 d
+ARGS_basic-heap-00180-large := a b c 4105
+
+ENV_basic-heap-00181-ok := STRINGLEN_OK=${:!awk 'BEGIN{ for(i = 0; i < 9; i++) { printf "a" ; } ; print }'!}
+ENV_basic-heap-00181-min := STRINGLEN_MIN=${:!awk 'BEGIN{ for(i = 0; i < 10; i++) { printf "a" ; } ; print }'!}
+ENV_basic-heap-00181-med := STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 17; i++) { printf "a" ; } ; print }'!}
+ENV_basic-heap-00181-large := STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!}
+
 .SUFFIXES: .exe .out
 .exe.out:
 	(${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} ; echo $$? > ${.TARGET}) || true
@@ -104,6 +114,13 @@ basic-00182-min.out: TestInputFile1
 basic-00182-med.out: TestInputFile1
 basic-00182-large.out: TestInputFile1
 
+basic-heap-00182-ok.out: TestInputFile1
+basic-heap-00182-min.out: TestInputFile1
+basic-heap-00182-med.out: TestInputFile1
+basic-heap-00182-large.out: TestInputFile1
+
 # This one expects to run with a very very long cwd; just skip it.
 basic-00183-large.out:
+	echo skip > $@
+basic-heap-00183-large.out:
 	echo skip > $@
