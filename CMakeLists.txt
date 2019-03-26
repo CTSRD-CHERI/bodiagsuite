@@ -45,6 +45,11 @@ file( GLOB test_cs_heap RELATIVE ${CMAKE_SOURCE_DIR} testcases-heap/*.c )
 # Or test with just a subset:
 # file ( GLOB test_cs RELATIVE ${CMAKE_SOURCE_DIR} testcases/basic-00001-*.c  testcases/basic-00232-*.c )
 
+# Ignore missing malloc prototype for now
+add_compile_options(-Wno-implicit-function-declaration)
+# These are intentionally buggy -> silence the array bounds warning
+add_compile_options(-Wno-array-bounds)
+
 if (NOT CMAKE_CROSSCOMPILING)
 	enable_testing()
 endif()
