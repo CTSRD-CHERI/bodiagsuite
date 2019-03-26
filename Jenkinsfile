@@ -76,7 +76,7 @@ node('linux') {
 
 	// CHERI128
 	process('cheri128', 'cheriabi',
-			[stageSuffix: "CHERI128 (subobject default)",
+			[stageSuffix: "CHERI128",
 			 extraArgs: ''])
 	process('cheri128', 'subobject-safe',
 			[stageSuffix: "CHERI128 (subobject default)",
