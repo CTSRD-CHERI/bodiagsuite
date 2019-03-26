@@ -59,7 +59,8 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 int main(int argc, char *argv[])
 {
-  static   char buf[10] = "";
+  static char* buf;
+  buf = malloc(10);
 
 
   /*  OK  */

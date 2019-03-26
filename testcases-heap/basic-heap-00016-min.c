@@ -57,10 +57,12 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
-static   char buf[10] = "";
+static char* buf;
 
 int main(int argc, char *argv[])
 {
+  buf = malloc(10);
+
 
   /*  BAD  */
   buf[10] = 'A';
