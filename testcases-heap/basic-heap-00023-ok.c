@@ -59,7 +59,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 typedef struct
 {
-  char* buf[10];
+  char buf[10];
   int int_field;
 } my_struct;
 
