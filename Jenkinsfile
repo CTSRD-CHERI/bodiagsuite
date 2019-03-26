@@ -8,16 +8,17 @@ def archiveTestResults(String buildDir) {
 	}
 }
 
-cheribuildProject(target: 'bodiagsuite', cpu: 'native',
+// Use the native compiler instead of CHERI clang so that we can find the ASAN runtime
+cheribuildProject(target: 'bodiagsuite', cpu: 'native', skipArtifacts: true,
 		buildStage: "Build Linux (insecure)", nodeLabel: 'linux',
 		sdkCompilerOnly: true,
-		extraArgs: '--bodiagsuite-native/no-use-asan',
+		extraArgs: '--bodiagsuite-native/no-use-asan --without-sdk',
 		skipTarball: true, runTests: true, noIncrementalBuild: true,
 		afterTests: archiveTestResults("bodiagsuite-native-build"))
 
-cheribuildProject(target: 'bodiagsuite', cpu: 'native',
+cheribuildProject(target: 'bodiagsuite', cpu: 'native', skipArtifacts: true,
 		buildStage: "Build Linux (ASAN)", nodeLabel: 'linux',
 		sdkCompilerOnly: true,
-		extraArgs: '--bodiagsuite-native/use-asan',
+		extraArgs: '--bodiagsuite-native/use-asan --without-sdk',
 		skipTarball: true, runTests: true, noIncrementalBuild: true,
 		afterTests: archiveTestResults("bodiagsuite-native-asan-build"))
