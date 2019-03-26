@@ -1,6 +1,8 @@
 #!/bin/sh
 
 ulimit -c 0
+# many of the tests leak memory!
+export ASAN_OPTIONS=detect_leaks=0
 ${1};
 exit_code=$?
 echo "Exit code was ${exit_code}"

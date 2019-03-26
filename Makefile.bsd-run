@@ -87,24 +87,24 @@ ARGS_basic-00180-min := a 10 c d
 ARGS_basic-00180-med := a b 17 d
 ARGS_basic-00180-large := a b c 4105
 
-ENV_basic-00181-ok := STRINGLEN_OK=${:!awk 'BEGIN{ for(i = 0; i < 9; i++) { printf "a" ; } ; print }'!}
-ENV_basic-00181-min := STRINGLEN_MIN=${:!awk 'BEGIN{ for(i = 0; i < 10; i++) { printf "a" ; } ; print }'!}
-ENV_basic-00181-med := STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 17; i++) { printf "a" ; } ; print }'!}
-ENV_basic-00181-large := STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!}
+ENV_basic-00181-ok := export STRINGLEN_OK=${:!awk 'BEGIN{ for(i = 0; i < 9; i++) { printf "a" ; } ; print }'!};
+ENV_basic-00181-min := export STRINGLEN_MIN=${:!awk 'BEGIN{ for(i = 0; i < 10; i++) { printf "a" ; } ; print }'!};
+ENV_basic-00181-med := export STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 17; i++) { printf "a" ; } ; print }'!};
+ENV_basic-00181-large := export STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!};
 
 ARGS_basic-heap-00180-ok := 9 b c d
 ARGS_basic-heap-00180-min := a 10 c d
 ARGS_basic-heap-00180-med := a b 17 d
 ARGS_basic-heap-00180-large := a b c 4105
 
-ENV_basic-heap-00181-ok := STRINGLEN_OK=${:!awk 'BEGIN{ for(i = 0; i < 9; i++) { printf "a" ; } ; print }'!}
-ENV_basic-heap-00181-min := STRINGLEN_MIN=${:!awk 'BEGIN{ for(i = 0; i < 10; i++) { printf "a" ; } ; print }'!}
-ENV_basic-heap-00181-med := STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 17; i++) { printf "a" ; } ; print }'!}
-ENV_basic-heap-00181-large := STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!}
+ENV_basic-heap-00181-ok := export STRINGLEN_OK=${:!awk 'BEGIN{ for(i = 0; i < 9; i++) { printf "a" ; } ; print }'!};
+ENV_basic-heap-00181-min := export STRINGLEN_MIN=${:!awk 'BEGIN{ for(i = 0; i < 10; i++) { printf "a" ; } ; print }'!};
+ENV_basic-heap-00181-med := export STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 17; i++) { printf "a" ; } ; print }'!};
+ENV_basic-heap-00181-large := export STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!};
 
 .SUFFIXES: .exe .out
 .exe.out:
-	(${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} ; echo $$? > ${.TARGET}) || true
+	(export ASAN_OPTIONS=detect_leaks=0; ${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} ; echo $$? > ${.TARGET}) || true
 
 TestInputFile1:
 	awk 'BEGIN{ for(i = 0; i < 5000; i++) { printf "A" ; } }' > $@

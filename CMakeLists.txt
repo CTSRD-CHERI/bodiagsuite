@@ -55,13 +55,17 @@ if (NOT CMAKE_CROSSCOMPILING)
 	enable_testing()
 endif()
 
+#  Could also add extern "C" int __lsan_is_turned_off() { return 1; }
+# to disable LSAN (but for now just set ASAN_OPTIONS=detect_leaks=0 in the test script)
+# add_library(disable-lsan OBJECT disable-leak-sanitizer.c)
+
 foreach ( tcf ${test_cs} ${test_cs_heap})
 	string ( REGEX REPLACE ".c$" "" tf ${tcf} )
 	string ( REGEX REPLACE "^testcases(-heap)?/" "" to ${tf} )
 	unset ( tf )
 	add_executable ( ${to} ${tcf} )
 	target_compile_options( ${to} PUBLIC "-pthread")
-	target_link_libraries( ${to} "pthread" )
+	# target_link_libraries( ${to} "pthread" disable-lsan)
 	add_test(NAME test-${to} COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/check_test.sh $<TARGET_FILE:${to}>)
 	if (NOT ${to} MATCHES ".*-ok$")
 		# message(STATUS "Expecting ${to} to fail")
