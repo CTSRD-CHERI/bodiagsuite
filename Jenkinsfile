@@ -21,4 +21,4 @@ cheribuildProject(target: 'bodiagsuite', cpu: 'native', skipArtifacts: true,
 		sdkCompilerOnly: true,
 		extraArgs: '--bodiagsuite-native/use-asan --without-sdk',
 		skipTarball: true, runTests: true, noIncrementalBuild: true,
-		afterTests: archiveTestResults("bodiagsuite-native-asan-build"))
+		afterTests: archiveTestResults("bodiagsuite-asan-native-build"))
