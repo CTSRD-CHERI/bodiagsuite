@@ -56,38 +56,6 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
 
-#include <sys/types.h>
-#include <sys/ipc.h>
-#include <sys/shm.h>
-#include <assert.h>
-#include <stdlib.h>
-
-int getSharedMem()
-{
-  return (shmget(IPC_PRIVATE, 10, 0xffffffff));
-}
-
-void relSharedMem(int memID)
-{
-  struct shmid_ds temp;
-  shmctl(memID, IPC_RMID, &temp);
-}
-
-int main(int argc, char *argv[])
-{
-  int memIdent;
-  char * buf;
-
-  memIdent = getSharedMem();
-  assert(memIdent != -1);
-  buf = ((char *) shmat(memIdent, NULL, 0));
-  assert(((int)buf) != -1);
-
-  /*  BAD  */
-  buf[17] = 'A';
-
-  shmdt((void *)buf);
-  relSharedMem(memIdent);
-
-  return 0;
-}
+#define ACCESS_OFFSET 17
+/* BAD */
+#include "basic-00013-common.inc"
