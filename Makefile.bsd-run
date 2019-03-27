@@ -104,7 +104,7 @@ ENV_basic-heap-00181-large := export STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; 
 
 .SUFFIXES: .exe .out
 .exe.out:
-	(export ASAN_OPTIONS=detect_leaks=0; ${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} ; echo $$? > ${.TARGET}) || true
+	(export ASAN_OPTIONS=detect_leaks=0; ${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} 2>${.IMPSRC:T:R}.stderr ; echo $$? > ${.TARGET}) || true
 
 TestInputFile1:
 	awk 'BEGIN{ for(i = 0; i < 5000; i++) { printf "A" ; } }' > $@
