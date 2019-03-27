@@ -60,10 +60,15 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <errno.h>
 #include <unistd.h>
 
+#include "../check-cwd-length.h"
+
 int main(int argc, char *argv[])
 {
   char buf[10];
   char * x;
+  if (!check_cwd_length(4106))
+    return 1;
+
 
   /*  BAD  */
   x = getcwd(buf, 4106);
