@@ -1,11 +1,11 @@
 #include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/shm.h>
+#include <sys/stat.h>
 #include <assert.h>
 #include <stdlib.h>
 #include <err.h>
 #include <sysexits.h>
-#include <fcntl.h>
 
 #ifndef ACCESS_OFFSET
 #error ACCESS_OFFSET not defined
