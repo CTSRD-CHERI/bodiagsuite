@@ -115,4 +115,5 @@ def jobs = [
 }
 ]
 // print(jobs)
+jobs.failFast = true
 parallel jobs
