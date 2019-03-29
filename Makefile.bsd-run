@@ -131,7 +131,7 @@ basic-heap-00182-med.out: TestInputFile1
 basic-heap-00182-large.out: TestInputFile1
 
 # This one expects to run with a very very long cwd; just skip it.
-basic-00183-large.out:
-	echo skip > $@
-basic-heap-00183-large.out:
-	echo skip > $@
+# basic-00183-large.out:
+#	echo skip > $@
+#basic-heap-00183-large.out:
+#	echo skip > $@
