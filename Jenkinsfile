@@ -9,7 +9,7 @@ rm -f ${outputXml}
 ls -la ${buildDir}/test-results.xml
 mv -f ${buildDir}/test-results.xml ${outputXml}
 """
-        archiveArtifacts allowEmptyArchive: false, artifacts: "${outputXml}", fingerprint: true, onlyIfSuccessful: true
+        archiveArtifacts allowEmptyArchive: false, artifacts: "${outputXml}", fingerprint: true, onlyIfSuccessful: false
         junit "${outputXml}"
         // Cleanup after archiving the test results
         dir("${buildDir}") { deleteDir() }
