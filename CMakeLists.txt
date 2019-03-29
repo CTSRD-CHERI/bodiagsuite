@@ -50,6 +50,8 @@ file( GLOB test_cs_heap RELATIVE ${CMAKE_SOURCE_DIR} testcases-heap/*.c )
 add_compile_options(-Wno-implicit-function-declaration)
 # These are intentionally buggy -> silence the array bounds warning
 add_compile_options(-Wno-array-bounds)
+# ignore switch on boolean (used in some of the files):
+add_compile_options(-Wno-switch-bool)
 
 if (NOT CMAKE_CROSSCOMPILING)
 	enable_testing()
