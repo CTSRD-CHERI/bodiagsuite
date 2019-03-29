@@ -76,9 +76,20 @@ LIMCMD=ulimit -c 0 &&
 .endif
 .info HAVE_LIMITS_CMD=${HAVE_LIMITS_CMD} LIMCMD=${LIMCMD}
 
+.ifdef USE_VALGRIND
+VALGRIND_VERSION!=valgrind --version
+.info VALGRIND_VERSION=${VALGRIND_VERSION}
+# Ignore memory leaks, we only want other errors
+# Exit code 162 to match CHERI SIGPROT
+COMMAND_PREFIX=valgrind --trace-children=yes --log-fd=2 --tool=memcheck --leak-check=no --error-exitcode=162 --undef-value-errors=yes
+.else
+COMMAND_PREFIX=
+.endif
+
 info:
 	echo "HAVE_LIMITS_CMD=${HAVE_LIMITS_CMD}"
 	echo ".MAKE.OS=${.MAKE.OS}"
+	echo "COMMAND_PREFIX=${COMMAND_PREFIX}"
 
 # These are designed to test the upper edge of the checked bounds for this
 # particular test case.
@@ -104,7 +115,7 @@ ENV_basic-heap-00181-large := export STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; 
 
 .SUFFIXES: .exe .out
 .exe.out:
-	(export ASAN_OPTIONS=detect_leaks=0; ${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} 2>${.IMPSRC:T:R}.stderr ; echo $$? > ${.TARGET}) || true
+	(export ASAN_OPTIONS=detect_leaks=0; ${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${COMMAND_PREFIX} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} 2>${.IMPSRC:T:R}.stderr ; echo $$? > ${.TARGET}) || true
 
 TestInputFile1:
 	awk 'BEGIN{ for(i = 0; i < 5000; i++) { printf "A" ; } }' > $@
