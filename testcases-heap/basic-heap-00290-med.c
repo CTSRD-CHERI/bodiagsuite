@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
   if (copy_size <= buf_size)
   {
     /*  BAD  */
-    /* original case uses SIZE_MAX): memcpy(buf, src, copy_size); */
+    /* original case uses SIZE_MAX: memcpy(buf, src, copy_size); */
     memcpy(buf, src, 18);
   }
 
