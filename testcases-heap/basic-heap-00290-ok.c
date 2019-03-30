@@ -58,18 +58,20 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <string.h>
 
+#define MALLOC_SIZE 10
+
 int main(int argc, char *argv[])
 {
   int copy_size;
   int buf_size;
   char* src = (char*)malloc(10);
-  char* buf = (char*)malloc(10);
+  char* buf = (char*)malloc(MALLOC_SIZE);
 
 
   memset(src, 'A', 10);
   src[10 - 1] = '\0';
   copy_size = 10;
-  buf_size = sizeof buf;
+  buf_size = MALLOC_SIZE;
   if (copy_size <= buf_size)
   {
     /*  OK  */

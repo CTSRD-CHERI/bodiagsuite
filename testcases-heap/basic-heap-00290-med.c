@@ -58,22 +58,25 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <string.h>
 
+#define MALLOC_SIZE 10
+
 int main(int argc, char *argv[])
 {
   int copy_size;
   int buf_size;
-  char src[18];
+  char* src = (char*)malloc(18);
   char* buf = (char*)malloc(10);
 
 
   memset(src, 'A', 18);
   src[18 - 1] = '\0';
   copy_size = -1;
-  buf_size = sizeof buf;
+  buf_size = MALLOC_SIZE;
   if (copy_size <= buf_size)
   {
     /*  BAD  */
-    memcpy(buf, src, copy_size);
+    /* original case uses SIZE_MAX): memcpy(buf, src, copy_size); */
+    memcpy(buf, src, 18);
   }
 
 
