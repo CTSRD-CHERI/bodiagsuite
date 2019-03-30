@@ -10,8 +10,9 @@ ls -la ${buildDir}/test-results.xml
 mv -f ${buildDir}/test-results.xml ${outputXml}
 """
         archiveArtifacts allowEmptyArchive: false, artifacts: "${outputXml}", fingerprint: true, onlyIfSuccessful: false
-        // Only record junit results for cases where almost all tests should pass (ignore insecure native runs)
-        if (buildDir.contains("-asan-") || buildDir.contains("-128-")) {
+        // Only record junit results for cases where all tests should pass
+        // (ignore insecure native runs)
+        if (testSuffix.contains("-subobject")) {
                 junit "${outputXml}"
         }
         // Cleanup after archiving the test results
