@@ -53,37 +53,47 @@ def jobs = [
 // native
 "Linux (insecure)"               : {
     process('native', 'insecure',
-            [stageSuffix: "Linux (insecure)", extraArgs: '--bodiagsuite-native/no-use-asan --without-sdk'])
+            [stageSuffix: "Linux (insecure)", extraArgs: '--bodiagsuite/no-use-asan --without-sdk'])
 },
 "Linux (fortify)"                : {
     process('native', 'fortify-source',
             [stageSuffix: "Linux (_FORTIFY_SOURCE)",
-             extraArgs  : '--bodiagsuite-native/no-use-asan --without-sdk --bodiagsuite-native/cmake-options=-DWITH_FORTIFY_SOURCE=ON'])
+             extraArgs  : '--bodiagsuite/no-use-asan --without-sdk --bodiagsuite/use-fortify-source'])
 },
 "Linux (stack-protector)"        : {
     process('native', 'stack-protector',
             [stageSuffix: "Linux (stack-protector)",
-             extraArgs  : '--bodiagsuite-native/no-use-asan --without-sdk --bodiagsuite-native/cmake-options=-DWITH_STACK_PROTECTOR=ON'])
+             extraArgs  : '--bodiagsuite/no-use-asan --without-sdk --bodiagsuite/use-stack-protector'])
 },
 "Linux (stack-protector+fortify)": {
     process('native', 'stack-protector-and-fortify-source',
             [stageSuffix: "Linux (stack-protector+_FORTIFY_SOURCE)",
-             extraArgs  : '--bodiagsuite-native/no-use-asan --without-sdk --bodiagsuite-native/cmake-options="-DWITH_FORTIFY_SOURCE=ON -DWITH_STACK_PROTECTOR=ON"'])
+             extraArgs  : '--bodiagsuite/no-use-asan --without-sdk --bodiagsuite/use-stack-protector --bodiagsuite/use-fortify-source'])
 },
-
 
 // native+ASAN
 "Linux (ASAN)"                   : {
     process('native', 'asan',
             [stageSuffix: "Linux (ASAN)",
-             extraArgs  : '--bodiagsuite-native/use-asan --without-sdk'])
+             extraArgs  : '--bodiagsuite/use-asan --without-sdk'])
 },
 "Linux (ASAN+sp+fortify)"        : {
     process('native', 'asan-stack-protector-fortify-source',
             [stageSuffix: "Linux (ASAN+stack-protector+_FORTIFY_SOURCE)",
-             extraArgs  : '--bodiagsuite-native/use-asan --without-sdk --bodiagsuite-native/cmake-options="-DWITH_FORTIFY_SOURCE=ON -DWITH_STACK_PROTECTOR=ON"'])
+             extraArgs  : '--bodiagsuite/use-asan --without-sdk --bodiagsuite/use-stack-protector --bodiagsuite/use-fortify-source'])
 },
 
+// native+Valgrind
+"Linux (Valgrind)"                : {
+    process('native', 'valgrind',
+            [stageSuffix: "Linux (ASAN)",
+             extraArgs  : '--bodiagsuite/no-use-asan --bodiagsuite/use-valgrind --without-sdk'])
+},
+"Linux (Valgrind+sp+fortify)"     : {
+    process('native', 'valgrind-stack-protector-fortify-source',
+            [stageSuffix: "Linux (ASAN+stack-protector+_FORTIFY_SOURCE)",
+             extraArgs  : '--bodiagsuite/no-use-asan --bodiagsuite/use-valgrind --without-sdk --bodiagsuite/use-stack-protector --bodiagsuite/use-fortify-source'])
+},
 
 // MIPS:
 "FreeBSD MIPS (insecure)"        : {
@@ -106,7 +116,7 @@ def jobs = [
 },
 "CheriABI+subobject-safe"        : {
     process('cheri128', 'subobject-safe',
-            [stageSuffix: "CHERI128 (subobject default)",
+            [stageSuffix: "CHERI128 (subobject safe)",
              extraArgs  : '--subobject-bounds=subobject-safe'])
 },
 "CheriABI+subobject-everywhere"  : {
