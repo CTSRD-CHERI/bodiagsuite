@@ -56,13 +56,14 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
 
+#define MALLOC_SIZE 10
 
 int main(int argc, char *argv[])
 {
   int i;
-  char* buf = (char*)malloc(10);
+  char* buf = (char*)malloc(MALLOC_SIZE);
 
-  i = (sizeof buf > 10 + 1) ? 0 : 10;
+  i = (MALLOC_SIZE > 10 + 1) ? 0 : 10;
 
   /*  BAD  */
   buf[i] = 'A';

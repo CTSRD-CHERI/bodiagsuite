@@ -56,12 +56,13 @@ OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 */
 
+#define MALLOC_SIZE 10
 
 int main(int argc, char *argv[])
 {
-  char* buf = (char*)malloc(10);
+  char* buf = (char*)malloc(MALLOC_SIZE);
 
-  switch (sizeof buf > 10 + 1)
+  switch (MALLOC_SIZE > 10 + 1)
   {
     case 1:
       return 0;
