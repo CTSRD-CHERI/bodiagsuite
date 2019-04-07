@@ -36,7 +36,7 @@ def process(String cpu, String xmlSuffix, Map args) {
     }
     def commonArgs = [target     : 'bodiagsuite', cpu: cpu,
                       skipScm    : false, nodeLabel: "linux",
-                      skipTarball: true, runTests: true, noIncrementalBuild: true,
+                      skipTarball: true, runTests: true,
                       afterTests : archiveTestResults(buildDir, cpu + "-" + xmlSuffix),
                       useCheriKernelForMipsTests: true,
                       beforeSCM: { sh 'rm -rf bodiagsuite-*-build *.xml' } ]
