@@ -102,11 +102,11 @@ def jobs = [
             [stageSuffix: "FreeBSD MIPS (insecure)",
              extraArgs  : '--bodiagsuite-mips/no-use-asan'])
 },
-"FreeBSD MIPS (ASAN)"            : {
-    process('mips', 'asan',
-            [stageSuffix: "FreeBSD MIPS (ASAN)",
-             extraArgs  : '--bodiagsuite-mips/use-asan'])
-},
+//"FreeBSD MIPS (ASAN)"            : {
+//    process('mips', 'asan',
+//            [stageSuffix: "FreeBSD MIPS (ASAN)",
+//             extraArgs  : '--bodiagsuite-mips/use-asan'])
+//},
 
 
 // CHERI128
