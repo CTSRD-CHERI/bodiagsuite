@@ -128,5 +128,13 @@ def jobs = [
 }
 ]
 // print(jobs)
-jobs.failFast = true
-parallel jobs
+boolean parallel = false;
+if (parallel) {
+    jobs.failFast = true
+    parallel jobs
+} else {
+    jobs.each { key, value ->
+        echo("RUNNING $key")
+        value();
+    }
+}
