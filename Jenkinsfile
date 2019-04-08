@@ -87,12 +87,12 @@ def jobs = [
 // native+Valgrind
 "Linux (Valgrind)"                : {
     process('native', 'valgrind',
-            [stageSuffix: "Linux (ASAN)",
+            [stageSuffix: "Linux (Valgrind)",
              extraArgs  : '--bodiagsuite/no-use-asan --bodiagsuite/use-valgrind --without-sdk'])
 },
 "Linux (Valgrind+sp+fortify)"     : {
     process('native', 'valgrind-stack-protector-fortify-source',
-            [stageSuffix: "Linux (ASAN+stack-protector+_FORTIFY_SOURCE)",
+            [stageSuffix: "Linux (Valgrind+stack-protector+_FORTIFY_SOURCE)",
              extraArgs  : '--bodiagsuite/no-use-asan --bodiagsuite/use-valgrind --without-sdk --bodiagsuite/use-stack-protector --bodiagsuite/use-fortify-source'])
 },
 
@@ -102,6 +102,7 @@ def jobs = [
             [stageSuffix: "FreeBSD MIPS (insecure)",
              extraArgs  : '--bodiagsuite-mips/no-use-asan'])
 },
+
 //"FreeBSD MIPS (ASAN)"            : {
 //    process('mips', 'asan',
 //            [stageSuffix: "FreeBSD MIPS (ASAN)",
