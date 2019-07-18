@@ -67,7 +67,7 @@ int main(int argc, char *argv[])
   src[18 - 1] = '\0';
 
   /*  BAD  */
-  memcpy(buf, src, -1);
+  memcpy(buf, src, sizeof(src));
 
 
 

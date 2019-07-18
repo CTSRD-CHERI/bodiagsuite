@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
 
   memset(src, 'A', 10);
   src[10 - 1] = '\0';
-  size = 10;
+  size = sizeof(src);
 
   /*  OK  */
   memcpy(buf, src, size);
