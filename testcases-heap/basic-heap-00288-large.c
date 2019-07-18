@@ -58,16 +58,18 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <string.h>
 
+#define SRC_SIZE 4106
+
 int main(int argc, char *argv[])
 {
-  char src[4106];
+  char* src = (char*)malloc(SRC_SIZE);
   char* buf = (char*)malloc(10);
 
-  memset(src, 'A', 4106);
-  src[4106 - 1] = '\0';
+  memset(src, 'A', SRC_SIZE);
+  src[SRC_SIZE - 1] = '\0';
 
   /*  BAD  */
-  memcpy(buf, src, sizeof(src));
+  memcpy(buf, src, SRC_SIZE);
 
 
 
