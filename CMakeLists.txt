@@ -38,6 +38,11 @@ endif()
 if (WITH_FORTIFY_SOURCE)
 	message(STATUS "compiling WITH _FORTIFY_SOURCE=2")
 	add_definitions(-D_FORTIFY_SOURCE=2)
+	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+		# _FORTIFY_SOURCE requires optimizations with GLIBC
+		# Try to disable dead-store-elimination and dead-code-elimination
+		add_compile_options(-O1 -fno-dse -fno-dce -fno-tree-dse -fno-tree-dce)
+	endif()
 else()
 	add_definitions(-D_FORTIFY_SOURCE=0)
 	message(STATUS "compiling WITHOUT _FORTIFY_SOURCE")

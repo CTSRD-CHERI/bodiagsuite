@@ -114,8 +114,9 @@ ENV_basic-heap-00181-med := export STRINGLEN_MED=${:!awk 'BEGIN{ for(i = 0; i < 
 ENV_basic-heap-00181-large := export STRINGLEN_LARGE=${:!awk 'BEGIN{ for(i = 0; i < 4105; i++) { printf "a" ; } ; print }'!};
 
 .SUFFIXES: .exe .out
+# LIBC_FATAL_STDERR_=1 ensures that buffer overflow detected errors go to stderr instead of TTY
 .exe.out:
-	(export ASAN_OPTIONS=detect_leaks=0; ${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${COMMAND_PREFIX} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} 2>${.IMPSRC:T:R}.stderr ; echo $$? > ${.TARGET}) || true
+	(export LIBC_FATAL_STDERR_=1 ASAN_OPTIONS=detect_leaks=0; ${ENV_${.IMPSRC:T:R}} ${LIMCMD} ${COMMAND_PREFIX} ${.IMPSRC} ${ARGS_${.IMPSRC:T:R}} 2>${.IMPSRC:T:R}.stderr ; echo $$? > ${.TARGET}) || true
 
 TestInputFile1:
 	awk 'BEGIN{ for(i = 0; i < 5000; i++) { printf "A" ; } }' > $@
