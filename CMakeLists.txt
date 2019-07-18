@@ -11,6 +11,8 @@ set(CMAKE_C_FLAGS_RELEASE "-g")
 set(CMAKE_C_FLAGS_MINSIZEREL "-g")
 add_compile_options(-O0)  # Hopefully adding -O0 here should turn of optimizations
 
+add_compile_options(-Wall)
+
 # Collect all the binaries into one directory and give them suffixes so make
 # can handle them in transformation rules.  Ick.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
@@ -47,7 +49,7 @@ file( GLOB test_cs_heap RELATIVE ${CMAKE_SOURCE_DIR} testcases-heap/*.c )
 # file ( GLOB test_cs RELATIVE ${CMAKE_SOURCE_DIR} testcases/basic-00001-*.c  testcases/basic-00232-*.c )
 
 # Ignore missing malloc prototype for now
-add_compile_options(-Wno-implicit-function-declaration)
+add_compile_options(-Werror=implicit-function-declaration)
 # These are intentionally buggy -> silence the array bounds warning
 add_compile_options(-Wno-array-bounds)
 # ignore switch on boolean (used in some of the files):
@@ -67,6 +69,7 @@ foreach ( tcf ${test_cs} ${test_cs_heap})
 	unset ( tf )
 	add_executable ( ${to} ${tcf} )
 	target_compile_options( ${to} PUBLIC "-pthread")
+	target_compile_options( ${to} PUBLIC "-include" "${CMAKE_SOURCE_DIR}/fix-missing-decls.h")
 	target_link_libraries( ${to} "pthread")
 	# target_link_libraries( ${to} disable-lsan)
 	add_test(NAME test-${to} COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/check_test.sh $<TARGET_FILE:${to}>)
