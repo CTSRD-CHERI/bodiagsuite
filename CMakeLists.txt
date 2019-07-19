@@ -38,10 +38,13 @@ endif()
 if (WITH_FORTIFY_SOURCE)
 	message(STATUS "compiling WITH _FORTIFY_SOURCE=2")
 	add_definitions(-D_FORTIFY_SOURCE=2)
+	# TODO: should do this once there are no more dead stores...
+	# Need to find the generator scripts to fix this.
 	if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
 		# _FORTIFY_SOURCE requires optimizations with GLIBC
 		# Try to disable dead-store-elimination and dead-code-elimination
-		add_compile_options(-O1 -fno-dse -fno-dce -fno-tree-dse -fno-tree-dce)
+		# add_compile_options(-O -fno-dse -fno-dce -fno-tree-dse -fno-tree-dce)
+		add_compile_definitions(__OPTIMIZE__=2)
 	endif()
 else()
 	add_definitions(-D_FORTIFY_SOURCE=0)

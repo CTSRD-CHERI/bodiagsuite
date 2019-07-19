@@ -71,7 +71,13 @@ int main(int argc, char *argv[])
   /*  OK  */
   memcpy(buf, src, SRC_SIZE);
 
-
-
   return 0;
 }
+
+#if defined(_FORTIFY_SOURCE) && _FORTIFY_SOURCE != 0
+# if defined(__GLIBC__) && __USE_FORTIFY_LEVEL != 2
+#  error FORTIFY_SOURCE not enabled even though it was requested
+# elif defined(__APPLE__) && _USE_FORTIFY_LEVEL != 2
+#  error FORTIFY_SOURCE not enabled even though it was requested
+# endif
+#endif // defined(_FORTIFY_SOURCE) && _FORTIFY_SOURCE != 0
