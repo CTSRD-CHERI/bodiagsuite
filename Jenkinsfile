@@ -124,8 +124,8 @@ def jobs = [
 }
 ]
 // print(jobs)
-boolean parallel = false;
-if (parallel) {
+boolean runParallel = true;
+if (runParallel) {
     jobs.failFast = true
     parallel jobs
 } else {
