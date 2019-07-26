@@ -1,13 +1,13 @@
 // import the cheribuildProject() step
 @Library('ctsrd-jenkins-scripts') _
 
-def archiveTestResults(String buildDir, String testSuffix) {
+def archiveTestResults(String testSuffix) {
     return {
         String outputXml = "test-results-${testSuffix}.xml"
         sh """
 rm -f ${outputXml}
-ls -la ${buildDir}/test-results.xml
-mv -f ${buildDir}/test-results.xml ${outputXml}
+ls -la bodiagsuite-*-build/test-results.xml
+mv -f bodiagsuite-*-build/test-results.xml ${outputXml}
 """
         archiveArtifacts allowEmptyArchive: false, artifacts: "${outputXml}", fingerprint: true, onlyIfSuccessful: false
         // Only record junit results for cases where all tests should pass
@@ -16,20 +16,16 @@ mv -f ${buildDir}/test-results.xml ${outputXml}
                 junit "${outputXml}"
         }
         // Cleanup after archiving the test results
-        dir("${buildDir}") { deleteDir() }
+        sh 'rm -rf bodiagsuite-*-build'
     }
 }
 
 def process(String cpu, String xmlSuffix, Map args) {
-    String buildDir = null
     if (cpu == "cheri128") {
-        buildDir = "bodiagsuite-128-build"
     } else if (cpu == "native" || cpu == "mips") {
         if (args["extraArgs"].contains('/no-use-asan')) {
-            buildDir = "bodiagsuite-${cpu}-build"
         } else {
             assert (args["extraArgs"].contains('/use-asan'))
-            buildDir = "bodiagsuite-asan-${cpu}-build"
         }
     } else {
         error("Invalid cpu: ${cpu}")
@@ -37,7 +33,7 @@ def process(String cpu, String xmlSuffix, Map args) {
     def commonArgs = [target     : 'bodiagsuite', cpu: cpu,
                       skipScm    : false, nodeLabel: "linux",
                       skipTarball: true, runTests: true,
-                      afterTests : archiveTestResults(buildDir, cpu + "-" + xmlSuffix),
+                      afterTests : archiveTestResults(cpu + "-" + xmlSuffix),
                       useCheriKernelForMipsTests: true,
                       beforeSCM: { sh 'rm -rf bodiagsuite-*-build *.xml' } ]
     if (cpu == "native") {
