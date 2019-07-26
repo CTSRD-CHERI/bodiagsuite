@@ -44,7 +44,7 @@ if (WITH_FORTIFY_SOURCE)
 		# _FORTIFY_SOURCE requires optimizations with GLIBC
 		# Try to disable dead-store-elimination and dead-code-elimination
 		# add_compile_options(-O -fno-dse -fno-dce -fno-tree-dse -fno-tree-dce)
-		add_compile_definitions(__OPTIMIZE__=2)
+		add_definitions(-D__OPTIMIZE__=2)
 	endif()
 else()
 	add_definitions(-D_FORTIFY_SOURCE=0)
