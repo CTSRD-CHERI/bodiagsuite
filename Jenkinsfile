@@ -31,7 +31,7 @@ def process(String cpu, String xmlSuffix, Map args) {
         error("Invalid cpu: ${cpu}")
     }
     def commonArgs = [target     : 'bodiagsuite', cpu: cpu,
-                      skipScm    : false, nodeLabel: "linux",
+                      skipScm    : false, nodeLabel: null,
                       skipTarball: true, runTests: true,
                       afterTests : archiveTestResults(cpu + "-" + xmlSuffix),
                       useCheriKernelForMipsTests: true,
@@ -43,7 +43,12 @@ def process(String cpu, String xmlSuffix, Map args) {
         assert (args["extraArgs"].contains('--without-sdk'))
     }
     echo("args = ${commonArgs + args}")
-    return cheribuildProject(commonArgs + args)
+    node("docker") {
+        dir ("bodiagsuite") { checkout scm }
+        docker.build("test-image", "bodiagsuite/docker/opensuse").inside {
+               cheribuildProject(commonArgs + args)
+        }
+    }
 }
 
 def jobs = [
@@ -124,7 +129,7 @@ def jobs = [
 }
 ]
 // print(jobs)
-boolean runParallel = true;
+boolean runParallel = false;
 if (runParallel) {
     jobs.failFast = true
     parallel jobs
