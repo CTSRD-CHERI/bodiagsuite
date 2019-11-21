@@ -49,6 +49,8 @@ def process(String cpu, String xmlSuffix, Map args) {
                cheribuildProject(commonArgs + args)
         }
     }
+    // Clean up the workspace after a successful build
+    deleteDir()
 }
 
 def jobs = [
